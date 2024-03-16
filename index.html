@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<!-- 设置视口以确保页面在移动设备上正确显示 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>随机加载游戏</title>
+<style>
+  /* 确保游戏iframe占满整个视口 */
+  html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+</style>
+<script>
+  // 当文档加载完毕时执行
+  document.addEventListener('DOMContentLoaded', function() {
+    // 使用fetch API请求JSON数据
+    fetch('https://raw.gitmirror.com/Dasen199/sjyx/main/%E9%9A%8F%E6%9C%BA%E6%B8%B8%E6%88%8F')
+      .then(response => response.text()) // 获取文本内容
+      .then(text => JSON.parse(text)) // 解析文本为JSON
+      .then(json => {
+        // 从JSON数据中获取游戏URL列表
+        const gameUrls = json.data.map(game => game.realGameUrl);
+        // 随机选择一个游戏URL并添加去广告参数
+        const randomGameUrl = gameUrls[Math.floor(Math.random() * gameUrls.length)] + '?&hb=1';
+        // 创建一个iframe元素
+        const iframe = document.createElement('iframe');
+        // 设置iframe的src属性为选中的游戏URL
+        iframe.src = randomGameUrl;
+        // 将iframe添加到body元素中
+        document.body.appendChild(iframe);
+      })
+      .catch(error => {
+        console.error('请求或解析游戏数据失败:', error);
+      });
+  });
+</script>
+</head>
+<body>
+</body>
+</html>
